@@ -242,7 +242,7 @@ private fun StreakCard(streak: Int) {
                 modifier           = Modifier.size(24.dp)
             )
             Text(
-                text  = "Sequencia Atual",
+                text  = "Sequência Atual",
                 style = CoreoType.H3,
                 color = CoreoColors.Text
             )
@@ -304,7 +304,7 @@ private fun StatsGrid(sessions: List<WorkoutSession>, repo: WorkoutRepository) {
         }
         item {
             StatCard(
-                title     = "Ultimos 7 Dias",
+                title     = "Últimos 7 Dias",
                 value     = if (last7M > 0) "${last7M}m ${last7S}s" else "${last7S}s",
                 icon      = Icons.Default.Star,
                 iconColor = CoreoColors.Success
@@ -340,7 +340,7 @@ private fun EvolutionCard(evoPct: Int?) {
                 modifier           = Modifier.size(14.dp)
             )
             Text(
-                text  = "Evolucao",
+                text  = "Evolução",
                 style = CoreoType.Caption,
                 color = CoreoColors.TextSecondary
             )
@@ -508,7 +508,7 @@ private fun CreateGoalPrompt(onClick: () -> Unit) {
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(text = "Criar Meta",    style = CoreoType.H3,    color = CoreoColors.Text)
-            Text(text = "Defina um objetivo para manter a consistencia",
+            Text(text = "Defina um objetivo para manter a consistência",
                 style = CoreoType.Caption, color = CoreoColors.TextSecondary)
         }
         Icon(
@@ -540,7 +540,7 @@ private fun EmptyStateContent(
         Spacer(Modifier.height(32.dp))
 
         Text(
-            text       = "Sua Jornada Comeca Aqui",
+            text       = "Sua Jornada Começa Aqui",
             fontSize   = 24.sp,
             fontWeight = FontWeight.Bold,
             color      = CoreoColors.Text
@@ -549,7 +549,7 @@ private fun EmptyStateContent(
         Spacer(Modifier.height(12.dp))
 
         Text(
-            text  = "Faca sua primeira prancha e comece a construir consistencia",
+            text  = "Faça sua primeira prancha e comece a construir consistência",
             style = CoreoType.Body,
             color = CoreoColors.TextSecondary,
             modifier = Modifier.padding(horizontal = 40.dp)
@@ -566,7 +566,7 @@ private fun EmptyStateContent(
             shape  = RoundedCornerShape(16.dp)
         ) {
             Text(
-                text       = "Comecar Agora",
+                text       = "Começar Agora",
                 fontSize   = 22.sp,
                 fontWeight = FontWeight.SemiBold,
                 color      = CoreoColors.Background,

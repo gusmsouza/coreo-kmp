@@ -1,31 +1,48 @@
 package com.coreo
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import com.coreo.theme.CoreoColors
-import com.coreo.theme.CoreoConstants
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.coreo.model.Goal
+import com.coreo.model.UserSettings
+import com.coreo.model.WorkoutSession
 import com.coreo.theme.CoreoTheme
-import com.coreo.theme.CoreoType
+import com.coreo.ui.Screen
+import com.coreo.ui.screens.MainScreen
 
 @Composable
 fun App() {
     CoreoTheme {
-        // Placeholder -- will be replaced with MainScreen in Phase 5
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(CoreoColors.Background),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text    = CoreoConstants.AppName,
-                style   = CoreoType.Headline,
-                color   = CoreoColors.Primary
+        // Temporary in-memory state -- will be replaced with
+        // real persistence (Room / DataStore) in Phase 8
+        var currentScreen by remember { mutableStateOf<Screen>(Screen.Main) }
+        var sessions      by remember { mutableStateOf<List<WorkoutSession>>(emptyList()) }
+        var goals         by remember { mutableStateOf<List<Goal>>(emptyList()) }
+        var settings      by remember { mutableStateOf(UserSettings()) }
+
+        when (currentScreen) {
+            is Screen.Main -> MainScreen(
+                sessions       = sessions,
+                goals          = goals,
+                settings       = settings,
+                onStartWorkout = { currentScreen = Screen.SetSetup },
+                onOpenHistory  = { currentScreen = Screen.History },
+                onOpenStats    = { currentScreen = Screen.Stats },
+                onOpenGoalSetup = { currentScreen = Screen.GoalSetup },
+                onOpenSettings = { currentScreen = Screen.Settings }
+            )
+            // Remaining screens will be added in subsequent phases
+            else -> MainScreen(
+                sessions       = sessions,
+                goals          = goals,
+                settings       = settings,
+                onStartWorkout = { currentScreen = Screen.SetSetup },
+                onOpenHistory  = { currentScreen = Screen.History },
+                onOpenStats    = { currentScreen = Screen.Stats },
+                onOpenGoalSetup = { currentScreen = Screen.GoalSetup },
+                onOpenSettings = { currentScreen = Screen.Settings }
             )
         }
     }
