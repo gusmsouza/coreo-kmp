@@ -7,6 +7,7 @@ sealed class Screen(val route: String) {
     object GoalSetup  : Screen("goal_setup")
     object Settings   : Screen("settings")
     object SetSetup   : Screen("set_setup")
+    object Countdown  : Screen("countdown")
     object Workout    : Screen("workout")
     object Rest       : Screen("rest")
     object Onboarding : Screen("onboarding")
