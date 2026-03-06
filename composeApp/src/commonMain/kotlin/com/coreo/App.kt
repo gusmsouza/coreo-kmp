@@ -1,6 +1,7 @@
 package com.coreo
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -20,14 +21,16 @@ import com.coreo.ui.screens.SettingsScreen
 import com.coreo.ui.screens.StatsScreen
 import com.coreo.ui.screens.WorkoutScreen
 
+// Repository is passed as Any? to keep App.kt in commonMain
+// androidMain casts it to AppRepository -- iOS will provide its own in Phase 11
 @Composable
-fun App() {
+fun App(repository: Any? = null) {
     CoreoTheme {
-        // Temporary in-memory state -- replaced with Room/DataStore in Phase 9
         var currentScreen      by remember { mutableStateOf<Screen>(Screen.Main) }
         var sessions           by remember { mutableStateOf<List<WorkoutSession>>(emptyList()) }
         var goals              by remember { mutableStateOf<List<Goal>>(emptyList()) }
         var settings           by remember { mutableStateOf(UserSettings()) }
+        var isLoaded           by remember { mutableStateOf(false) }
 
         // Workout coordinator state
         var numberOfSets       by remember { mutableIntStateOf(1) }
@@ -35,6 +38,16 @@ fun App() {
         var restDuration       by remember { mutableIntStateOf(60) }
         var currentSet         by remember { mutableIntStateOf(1) }
         var completedDurations by remember { mutableStateOf<List<Int>>(emptyList()) }
+
+        // Load persisted data on first launch
+        LaunchedEffect(Unit) {
+            loadData(repository) { s, g, us ->
+                sessions = s
+                goals    = g
+                settings = us
+                isLoaded = true
+            }
+        }
 
         when (currentScreen) {
 
@@ -87,7 +100,8 @@ fun App() {
                                 restDuration = restDuration
                             )
                         }
-                        sessions      = listOf(newSession) + sessions
+                        sessions = listOf(newSession) + sessions
+                        saveSession(repository, newSession)
                         currentScreen = Screen.Main
                     }
                 },
@@ -113,6 +127,7 @@ fun App() {
                 sessions        = sessions,
                 onDeleteSession = { session ->
                     sessions = sessions.filter { it.id != session.id }
+                    deleteSession(repository, session)
                 },
                 onBack = { currentScreen = Screen.Main }
             )
@@ -124,18 +139,21 @@ fun App() {
             )
 
             is Screen.Settings -> SettingsScreen(
-                settings         = settings,
-                onSettingsChanged = { updated -> settings = updated },
-                onResetAllData   = {
+                settings          = settings,
+                onSettingsChanged = { updated ->
+                    settings = updated
+                    saveSettings(repository, updated)
+                },
+                onResetAllData = {
                     sessions      = emptyList()
                     goals         = emptyList()
                     settings      = UserSettings()
+                    resetAll(repository)
                     currentScreen = Screen.Main
                 },
                 onBack = { currentScreen = Screen.Main }
             )
 
-            // GoalSetup and Onboarding -- Phase 9
             else -> MainScreen(
                 sessions        = sessions,
                 goals           = goals,

@@ -3,7 +3,6 @@ package com.coreo.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -89,52 +88,49 @@ fun SettingsScreen(
         )
 
         LazyColumn(
-            modifier        = Modifier.fillMaxSize(),
-            contentPadding  = PaddingValues(horizontal = CoreoSpacing.L, vertical = CoreoSpacing.M),
+            modifier            = Modifier.fillMaxSize(),
+            contentPadding      = PaddingValues(horizontal = CoreoSpacing.L, vertical = CoreoSpacing.M),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+
             // Workout Settings
             item {
                 SettingsSection(title = "Configurações de Treino", icon = Icons.Default.FitnessCenter) {
                     StepperRow(
-                        title    = "Duração Padrão",
-                        subtitle = "Para treinos simples",
-                        value    = settings.defaultDuration,
-                        min      = 10,
-                        max      = 300,
-                        step     = 5,
-                        display  = "${settings.defaultDuration}s",
-                        onDecrement = {
-                            onSettingsChanged(settings.copy(defaultDuration = settings.defaultDuration - 5))
-                        },
-                        onIncrement = {
-                            onSettingsChanged(settings.copy(defaultDuration = settings.defaultDuration + 5))
-                        }
+                        title       = "Duração Padrão",
+                        subtitle    = "Para treinos simples",
+                        value       = settings.defaultDuration,
+                        min         = 10,
+                        max         = 300,
+                        step        = 5,
+                        display     = "${settings.defaultDuration}s",
+                        onDecrement = { onSettingsChanged(settings.copy(defaultDuration = settings.defaultDuration - 5)) },
+                        onIncrement = { onSettingsChanged(settings.copy(defaultDuration = settings.defaultDuration + 5)) }
                     )
-                    HorizontalDivider(color = CoreoColors.PrimaryLight, modifier = Modifier.padding(horizontal = 4.dp))
+                    HorizontalDivider(
+                        color    = CoreoColors.PrimaryLight,
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
                     StepperRow(
-                        title    = "Intervalo Padrão",
-                        subtitle = "Entre séries em sets",
-                        value    = settings.defaultRestDuration,
-                        min      = 15,
-                        max      = 180,
-                        step     = 5,
-                        display  = "${settings.defaultRestDuration}s",
-                        onDecrement = {
-                            onSettingsChanged(settings.copy(defaultRestDuration = settings.defaultRestDuration - 5))
-                        },
-                        onIncrement = {
-                            onSettingsChanged(settings.copy(defaultRestDuration = settings.defaultRestDuration + 5))
-                        }
+                        title       = "Intervalo Padrão",
+                        subtitle    = "Entre séries em sets",
+                        value       = settings.defaultRestDuration,
+                        min         = 15,
+                        max         = 180,
+                        step        = 5,
+                        display     = "${settings.defaultRestDuration}s",
+                        onDecrement = { onSettingsChanged(settings.copy(defaultRestDuration = settings.defaultRestDuration - 5)) },
+                        onIncrement = { onSettingsChanged(settings.copy(defaultRestDuration = settings.defaultRestDuration + 5)) }
                     )
-                    HorizontalDivider(color = CoreoColors.PrimaryLight, modifier = Modifier.padding(horizontal = 4.dp))
+                    HorizontalDivider(
+                        color    = CoreoColors.PrimaryLight,
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
                     ToggleRow(
-                        title    = "Mostrar Countdown",
-                        subtitle = "Contagem 3, 2, 1 antes de começar",
-                        checked  = settings.alwaysShowCountdown,
-                        onCheckedChange = {
-                            onSettingsChanged(settings.copy(alwaysShowCountdown = it))
-                        }
+                        title           = "Mostrar Countdown",
+                        subtitle        = "Contagem 3, 2, 1 antes de começar",
+                        checked         = settings.alwaysShowCountdown,
+                        onCheckedChange = { onSettingsChanged(settings.copy(alwaysShowCountdown = it)) }
                     )
                 }
             }
@@ -143,8 +139,8 @@ fun SettingsScreen(
             item {
                 SettingsSection(title = "Planejamento Semanal", icon = Icons.Default.CalendarMonth) {
                     val weekdays = listOf(
-                        2 to "Segunda",   3 to "Terça",   4 to "Quarta",
-                        5 to "Quinta",    6 to "Sexta",   7 to "Sábado",  1 to "Domingo"
+                        2 to "Segunda", 3 to "Terça",  4 to "Quarta",
+                        5 to "Quinta",  6 to "Sexta",  7 to "Sábado", 1 to "Domingo"
                     )
                     weekdays.forEachIndexed { index, (weekday, name) ->
                         if (index > 0) {
@@ -154,9 +150,9 @@ fun SettingsScreen(
                             )
                         }
                         DayTypeRow(
-                            dayName  = name,
-                            dayType  = settings.weekSchedule[weekday] ?: DayType.PLANK,
-                            onClick  = {
+                            dayName = name,
+                            dayType = settings.weekSchedule[weekday] ?: DayType.PLANK,
+                            onClick = {
                                 val current         = settings.weekSchedule[weekday] ?: DayType.PLANK
                                 val hasIntensity    = settings.weekSchedule.values.contains(DayType.INTENSITY)
                                 val canAddIntensity = !hasIntensity || current == DayType.INTENSITY
@@ -171,18 +167,17 @@ fun SettingsScreen(
                             }
                         )
                     }
-                    // Helper text
                     Column(
                         modifier            = Modifier.padding(top = 8.dp, start = 4.dp, end = 4.dp),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text  = "Dias de descanso não quebram sua sequência.",
+                            text  = "🌙 Dias de descanso não quebram sua sequência.",
                             style = CoreoType.Small,
                             color = CoreoColors.TextSecondary
                         )
                         Text(
-                            text  = "Máximo de 1 dia de intensidade por semana.",
+                            text  = "⚡ Máximo de 1 dia de intensidade por semana.",
                             style = CoreoType.Small,
                             color = CoreoColors.TextSecondary
                         )
@@ -190,16 +185,14 @@ fun SettingsScreen(
                 }
             }
 
-            // Notifications (informational -- full impl in Phase 9)
+            // Notifications
             item {
                 SettingsSection(title = "Notificações", icon = Icons.Default.Notifications) {
                     ToggleRow(
-                        title    = "Lembrete Diário",
-                        subtitle = "Mensagem adaptada ao tipo do dia",
-                        checked  = settings.notificationsEnabled,
-                        onCheckedChange = {
-                            onSettingsChanged(settings.copy(notificationsEnabled = it))
-                        }
+                        title           = "Lembrete Diário",
+                        subtitle        = "Mensagem adaptada ao tipo do dia",
+                        checked         = settings.notificationsEnabled,
+                        onCheckedChange = { onSettingsChanged(settings.copy(notificationsEnabled = it)) }
                     )
                 }
             }
@@ -222,9 +215,9 @@ fun SettingsScreen(
                             modifier           = Modifier.size(20.dp)
                         )
                         Text(
-                            text      = "Apagar Todos os Dados",
-                            fontSize  = 16.sp,
-                            color     = CoreoColors.Error,
+                            text       = "Apagar Todos os Dados",
+                            fontSize   = 16.sp,
+                            color      = CoreoColors.Error,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -241,26 +234,23 @@ fun SettingsScreen(
             item {
                 SettingsSection(title = "Sobre", icon = Icons.Default.Info) {
                     AboutRow(label = "Versão", value = "1.0.0")
-                    HorizontalDivider(color = CoreoColors.PrimaryLight, modifier = Modifier.padding(horizontal = 4.dp))
+                    HorizontalDivider(
+                        color    = CoreoColors.PrimaryLight,
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
                     AboutRow(label = "Desenvolvido com", value = "♥ para wellness")
                 }
             }
         }
     }
 
-    // Reset confirmation
     if (showResetConfirmation) {
         AlertDialog(
             onDismissRequest = { showResetConfirmation = false },
-            title = { Text("Apagar Todos os Dados") },
-            text  = {
-                Text("Esta ação é irreversível. Todos os seus treinos, metas e configurações serão permanentemente apagados.")
-            },
+            title   = { Text("Apagar Todos os Dados") },
+            text    = { Text("Esta ação é irreversível. Todos os seus treinos, metas e configurações serão permanentemente apagados.") },
             confirmButton = {
-                TextButton(onClick = {
-                    showResetConfirmation = false
-                    onResetAllData()
-                }) {
+                TextButton(onClick = { showResetConfirmation = false; onResetAllData() }) {
                     Text("Apagar", color = CoreoColors.Error)
                 }
             },
@@ -274,6 +264,7 @@ fun SettingsScreen(
 }
 
 // MARK: - Section Wrapper
+// FIX: was Box (stacks children) → now Column (arranges vertically)
 
 @Composable
 private fun SettingsSection(
@@ -299,7 +290,7 @@ private fun SettingsSection(
                 color      = CoreoColors.Text
             )
         }
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(CoreoRadius.L))
@@ -332,21 +323,25 @@ private fun StepperRow(
         verticalAlignment     = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(text = title, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = CoreoColors.Text)
-            Text(text = subtitle, style = CoreoType.Small, color = CoreoColors.TextSecondary)
+        Column(
+            modifier            = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(text = title,    fontSize = 16.sp, fontWeight = FontWeight.Medium, color = CoreoColors.Text)
+            Text(text = subtitle, style    = CoreoType.Small, color = CoreoColors.TextSecondary)
         }
         Row(
             verticalAlignment     = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Box(
-                modifier = Modifier
+            Column(
+                modifier         = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
                     .background(if (value > min) CoreoColors.Primary else CoreoColors.Primary.copy(alpha = 0.3f))
                     .clickable(enabled = value > min) { onDecrement() },
-                contentAlignment = Alignment.Center
+                verticalArrangement   = Arrangement.Center,
+                horizontalAlignment   = Alignment.CenterHorizontally
             ) {
                 Text(text = "−", fontSize = 20.sp, color = CoreoColors.Background, fontWeight = FontWeight.Bold)
             }
@@ -357,13 +352,14 @@ private fun StepperRow(
                 color      = CoreoColors.Accent,
                 modifier   = Modifier.padding(horizontal = 4.dp)
             )
-            Box(
+            Column(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
                     .background(if (value < max) CoreoColors.Primary else CoreoColors.Primary.copy(alpha = 0.3f))
                     .clickable(enabled = value < max) { onIncrement() },
-                contentAlignment = Alignment.Center
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "+", fontSize = 20.sp, color = CoreoColors.Background, fontWeight = FontWeight.Bold)
             }
@@ -387,14 +383,20 @@ private fun ToggleRow(
         verticalAlignment     = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(text = title, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = CoreoColors.Text)
-            Text(text = subtitle, style = CoreoType.Small, color = CoreoColors.TextSecondary)
+        Column(
+            modifier            = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(text = title,    fontSize = 16.sp, fontWeight = FontWeight.Medium, color = CoreoColors.Text)
+            Text(text = subtitle, style    = CoreoType.Small, color = CoreoColors.TextSecondary)
         }
         Switch(
             checked         = checked,
             onCheckedChange = onCheckedChange,
-            colors          = SwitchDefaults.colors(checkedThumbColor = CoreoColors.Background, checkedTrackColor = CoreoColors.Accent)
+            colors          = SwitchDefaults.colors(
+                checkedThumbColor = CoreoColors.Background,
+                checkedTrackColor = CoreoColors.Accent
+            )
         )
     }
 }
@@ -412,7 +414,6 @@ private fun DayTypeRow(
         DayType.REST      -> CoreoColors.TextSecondary.copy(alpha = 0.12f) to CoreoColors.TextSecondary
         DayType.INTENSITY -> CoreoColors.Accent.copy(alpha = 0.15f) to CoreoColors.Accent
     }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -422,11 +423,12 @@ private fun DayTypeRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = dayName, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = CoreoColors.Text)
-        Box(
+        Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(20.dp))
                 .background(pillBg)
-                .padding(horizontal = 14.dp, vertical = 6.dp)
+                .padding(horizontal = 14.dp, vertical = 6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text       = dayType.displayName,

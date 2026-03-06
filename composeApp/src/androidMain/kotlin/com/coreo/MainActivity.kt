@@ -6,14 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.coreo.data.AppRepository
 
 class MainActivity : ComponentActivity() {
+    private lateinit var repository: AppRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-
+        repository = AppRepository(applicationContext)
         setContent {
-            App()
+            App(repository = repository)
         }
     }
 }
@@ -21,5 +24,5 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    App()
+    App(repository = null)
 }
